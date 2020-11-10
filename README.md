@@ -1,5 +1,5 @@
-# SolCharts 
-## A simple utility to chart stats from the Solace PubSub+ Event Broker
+# [SolCharts](https://solacese.github.io/sol-charts) 
+## A simple utility to chart stats from the Solace PubSub+ Event Broker - [Click here to launch](https://solacese.github.io/sol-charts)
 
 SolCharts uses SEMP commands to pull monitoring stats from Solace PubSub+ brokers. It completely runs on the client side and hence any credentials put into the tool does not get sent anywhere except the message broker to execute SEMP commands.
 
@@ -9,7 +9,7 @@ The tool has the following features:
 * HTTP/s basic authentication to the Solace PubSub+ broker
 * Upto 5 charts from the application
 * Ability to chart 4 VPN attributes per broker
-* Hosted on github pages or as a standalone electron app
+* Hosted on [github page](https://solacese.github.io/sol-charts) or as a [standalone electron app](https://github.com/solacese/sol-charts/releases/)
 
 
 ## Directions for usage

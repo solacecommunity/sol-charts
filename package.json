@@ -13,7 +13,7 @@
     "start-electron": "electron .",
     "lint": "prettier --check 'src/**/*.{html,js,svelte}'",
     "lint:fix": "prettier --write 'src/**/*.{html,js,svelte}'",
-    "package-mac": "electron-packager public --overwrite --platform=darwin --arch=x64 --icon=public/solly.ico --prune=true --asar  --out=release-builds",
+    "package-mac": "electron-packager public --overwrite --platform=darwin --arch=x64 --icon=public/solly.icns --prune=true --asar  --out=release-builds",
     "package-win": "electron-packager public --overwrite --platform=win32 --arch=x64 --icon=public/solly.ico --prune=true --asar --out=release-builds",
     "package-linux" : "electron-packager public --overwrite --platform=linux --arch=x64 --icon=public/solly.ico --prune=true --asar --out=release-builds"
   },
