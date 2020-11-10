@@ -15,25 +15,6 @@
     import routes from './routes';
 
     let isSideNavOpen = false;
-
-    async function testCors() {
-        const req = await fetch(
-            'https://mrthwc8w0kohp.messaging.solace.cloud:943/SEMP/v2/__private_monitor__/msgVpns/schwab-leaf-3?select=msgVpnName,enabled',
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    Authorization: 'Basic c2Nod2FiLWxlYWYtMy1hZG1pbjpuMGhjdDVzY2MxMnRlMmgzbWZlMG8zdnVtNQ==',
-                },
-            },
-        );
-
-        const res = await req.json();
-        console.log(res);
-    }
-
-    // testCors();
 </script>
 
 <style lang="scss" global>
