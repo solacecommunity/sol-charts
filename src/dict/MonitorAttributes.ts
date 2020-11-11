@@ -3,13 +3,14 @@
  */
 export const VPN_MONITOR_ATTRIBUTES = 
     [
-    {id:'msgVpnConnections',text:'Connection Counts'},
-    {id:'msgVpnConnectionsServiceSmf',text:'Connection Count SMF'},
-    {id:'msgVpnConnectionsServiceWeb',text:'Connection Count Web'},
-    {id:'msgVpnConnectionsServiceMqtt',text:'Connection Count MQTT'},
-    {id:'msgVpnConnectionsServiceRestIncoming',text:'Connection Count REST Incoming'},
-    {id:'msgVpnConnectionsServiceRestOutgoing',text:'Connection Count REST Outgoing'},
-    {id:'msgVpnConnectionsAmqp',text:'Connection Count AMQP'},
+    /* Connection counts aren't part of the public monitor spec as of yet :( */
+    // {id:'msgVpnConnections',text:'Connection Counts'},
+    // {id:'msgVpnConnectionsServiceSmf',text:'Connection Count SMF'},
+    // {id:'msgVpnConnectionsServiceWeb',text:'Connection Count Web'},
+    // {id:'msgVpnConnectionsServiceMqtt',text:'Connection Count MQTT'},
+    // {id:'msgVpnConnectionsServiceRestIncoming',text:'Connection Count REST Incoming'},
+    // {id:'msgVpnConnectionsServiceRestOutgoing',text:'Connection Count REST Outgoing'},
+    // {id:'connectionsServiceAmqp',text:'Connection Count AMQP'},
     {id:'rxMsgRate',text:'Ingress Rate (msgs/second)'},
     {id:'averageRxMsgRate',text:'Avg Ingress Rate (msgs/second)'},
     {id:'rxByteRate',text:'Ingress Rate (bytes/second)'},
