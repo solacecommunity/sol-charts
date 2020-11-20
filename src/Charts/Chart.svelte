@@ -1,60 +1,84 @@
 <script lang="ts">
-    import { Button, Grid, Row, Column, TextInput } from 'carbon-components-svelte';
-    import { LineChart } from '@carbon/charts-svelte';
-    import Misuse16 from 'carbon-icons-svelte/lib/Misuse16';
-    import BrokerAttributeMultiSelect from './BrokerAttributeMultiSelect.svelte';
-    import { brokerStore } from '../store';
-    import { getContext } from 'svelte';
-    import { ChartToBrokerAttributeMap } from './ChartToBrokerAttributeMap';
-    import { VPN_MONITOR_ATTRIBUTES } from '../dict/MonitorAttributes';
+import { Button, Grid, Row, Column, TextInput } from 'carbon-components-svelte';
+import { LineChart } from '@carbon/charts-svelte';
+import Misuse16 from 'carbon-icons-svelte/lib/Misuse16';
+import BrokerAttributeMultiSelect from './BrokerAttributeMultiSelect.svelte';
+import { brokerStore } from '../store';
+import { getContext } from 'svelte';
+import { ChartAttributeMaps } from './ChartAttributeMaps';
+import { CLIENT_MONITOR_ATTRIBUTES, VPN_MONITOR_ATTRIBUTES } from '../dict/MonitorAttributes';
 
-    export let chartId: number;
+export let chartId: number;
 
-    export let disabled = false;
+export let disabled = false;
 
-    export let close = (id: number) => {};
+export let close = (id: number) => {};
 
-    let chartLabel: string = 'Chart ' + chartId;
+let chartLabel: string = 'Chart ' + chartId;
 
-    let chartData = [];
+let chartData = [];
 
-    let chartToBrokerAttrMap: ChartToBrokerAttributeMap = getContext(ChartToBrokerAttributeMap.CONTEXT_KEY);
+let chartAttributeMaps: ChartAttributeMaps = getContext(ChartAttributeMaps.CONTEXT_KEY);
 
-    //Exported function to clear the chart
-    export function clearChart() {
-        chartData = [];
-    }
+//Exported function to clear the chart
+export function clearChart() {
+    chartData = [];
+}
 
-    //Exported function to add data to the chart
-    export function addChartData(timeStamp: Date, brokerId: number, data: any) {
-        let attributes = chartToBrokerAttrMap.getAttributesForChartsBroker(chartId, brokerId);
-        let brokerLabel = $brokerStore.find((broker) => broker.id == brokerId).label;
-        attributes.forEach((attr) => {
-            let attrLabel = VPN_MONITOR_ATTRIBUTES.find((dict) => dict.id == attr).text;
-            let dataPoint = { group: brokerLabel + ':' + attrLabel, value: data[attr], date: timeStamp };
-            chartData = [...chartData, dataPoint];
-        });
-    }
+//Exported function to add VPN data to the chart
+export function addVPNChartData(timeStamp: Date, brokerId: number, data: any) {
+    let attributes = chartAttributeMaps.getAttributesForChartsBroker(chartId, brokerId);
+    let brokerLabel = $brokerStore.find((broker) => broker.id == brokerId).label;
+    attributes.forEach((attr) => {
+        let attrLabel = VPN_MONITOR_ATTRIBUTES.find((dict) => dict.id == attr).text;
+        let dataPoint = { group: brokerLabel + ':' + attrLabel, value: data[attr], date: timeStamp };
+        chartData = [...chartData, dataPoint];
+    });
+}
+
+//Exported function to add client data to the chart
+export function addClientChartData(timeStamp: Date, brokerId: number, data: any) {
+    let attributes = chartAttributeMaps.getClientAttributesForChartsBroker(chartId, brokerId);
+    let brokerLabel = $brokerStore.find((broker) => broker.id == brokerId).label;
+    attributes.forEach((attr) => {
+        let attrLabel = CLIENT_MONITOR_ATTRIBUTES.find((dict) => dict.id == attr).text;
+        let dataPoint = {
+            group: `${data.clientUsername} (${brokerLabel}) : ${attrLabel}`,
+            value: data[attr],
+            date: timeStamp,
+        };
+        chartData = [...chartData, dataPoint];
+    });
+}
 </script>
 
 <style>
-    .ptb-10 {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
+.ptb-10 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
-    .flex {
-        display: flex;
-    }
+.mb-10 {
+    margin-bottom: 10px;
+}
 
-    .center-content {
-        justify-content: center;
-        align-content: center;
-        width: 100%;
-    }
-    .right-content {
-        justify-content: flex-end;
-    }
+.flex {
+    display: flex;
+}
+
+.center-content {
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+}
+.right-content {
+    justify-content: flex-end;
+}
+
+.border-white {
+    border: 2px dotted white;
+    border-radius: 25px;
+}
 </style>
 
 <Grid>
@@ -63,11 +87,12 @@
             <Column>
                 <div class="flex right-content">
                     <Button
-                        icon={Misuse16}
+                        icon="{Misuse16}"
                         kind="tertiary"
                         size="small"
                         style="border:none"
-                        on:click={() => close(chartId)} />
+                        on:click="{() => close(chartId)}"
+                    />
                 </div>
             </Column>
         </Row>
@@ -81,11 +106,12 @@
     <Row>
         <Column>
             <TextInput
-                {disabled}
+                disabled="{disabled}"
                 labelText="Chart Label"
                 placeholder="Chart Label..."
-                bind:value={chartLabel}
-                required />
+                bind:value="{chartLabel}"
+                required
+            />
         </Column>
     </Row>
     <div class="ptb-10">
@@ -96,19 +122,27 @@
         </Row>
         {#each $brokerStore as { id, isConnected, label }}
             {#if isConnected}
-                <Row>
-                    <Column>
-                        <BrokerAttributeMultiSelect {chartId} brokerId={id} brokerLabel={label} {disabled} />
-                    </Column>
-                </Row>
+                <div class="border-white mb-10">
+                    <Row>
+                        <Column>
+                            <BrokerAttributeMultiSelect
+                                chartId="{chartId}"
+                                brokerId="{id}"
+                                brokerLabel="{label}"
+                                disabled="{disabled}"
+                            />
+                        </Column>
+                    </Row>
+                </div>
             {/if}
         {/each}
     </div>
     <Row>
         <Column>
             <LineChart
-                data={chartData}
-                options={{ title: chartLabel, axes: { left: { title: 'Value', mapsTo: 'value', scaleType: 'linear' }, bottom: { mapsTo: 'date', title: 'Time', scaleType: 'time' } }, curve: 'curveMonotoneY', legend: { alignment: 'center', truncation: { numCharacter: 50 } }, height: '400px' }} />
+                data="{chartData}"
+                options="{{ title: chartLabel, axes: { left: { title: 'Value', mapsTo: 'value', scaleType: 'linear' }, bottom: { mapsTo: 'date', title: 'Time', scaleType: 'time' } }, curve: 'curveMonotoneY', legend: { alignment: 'center', truncation: { numCharacter: 50 } }, height: '400px' }}"
+            />
             <br />
         </Column>
     </Row>

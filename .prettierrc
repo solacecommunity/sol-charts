@@ -3,5 +3,10 @@
     "printWidth": 120,
     "semi": true,
     "singleQuote": true,
-    "trailingComma": "all"
+    "trailingComma": "all",
+    "svelteSortOrder" : "scripts-styles-markup",
+    "svelteStrictMode": true,
+    "svelteBracketNewLine": true,
+    "svelteAllowShorthand": false,
+    "svelteIndentScriptAndStyle": false
 }

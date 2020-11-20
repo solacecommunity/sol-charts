@@ -13,8 +13,15 @@
     import ChartArea20 from 'carbon-icons-svelte/lib/ChartArea20';
     import Router, { push } from 'svelte-spa-router';
     import routes from './routes';
+    import { writable } from 'svelte/store';
+    import { getContext, setContext } from 'svelte';
 
-    let isSideNavOpen = false;
+    const charting_store = writable(false);
+    charting_store.set(false);
+    setContext('isCharting', charting_store);
+
+    let isCharting = false;
+    charting_store.subscribe((val) => (isCharting = val));
 </script>
 
 <style lang="scss" global>
@@ -24,9 +31,10 @@
 </style>
 
 <main>
-    <Header company="SolCharts" platformName="" bind:isSideNavOpen>
-        <img src="images/solly_icon.jpg" />
-
+    <Header company="SolCharts" platformName="">
+        {#if !isCharting}
+            <img src="images/solly_icon.png" width="35" height="49" />
+        {:else}<img src="images/solly_animated_icon.gif" width="35" height="49" />{/if}
         <div slot="skip-to-content">
             <SkipToContent />
         </div>

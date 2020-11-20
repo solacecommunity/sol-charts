@@ -19,7 +19,7 @@ export const VPN_MONITOR_ATTRIBUTES =
     {id:'averageTxMsgRate',text:'Avg Egress Rate (msgs/second)'},
     {id:'txByteRate',text:'Egress Rate (bytes/second)'},
     {id:'averageTxByteRate',text:'Avg Egress Rate (bytes/second)'},
-    {id:'discardedRxMsgCount',text:'Ingress Discards'},
+    { id: 'discardedRxMsgCount', text: 'Ingress Discards' },
     {id:'discardedTxMsgCount',text:'Egress Discards'},
     {id:'tlsRxByteCount',text:'TLS messages received'},
     {id:'tlsTxByteCount',text:'TLS messages sent'},
@@ -53,4 +53,40 @@ export const VPN_MONITOR_ATTRIBUTES =
     {id:'averageTxCompressedByteRate',text:'Egress Compressed Rate (60s)'},
     {id:'averageRxUncompressedByteRate',text:'Ingress Uncompressed Rate (60s)'},
     {id:'averageTxUncompressedByteRate',text:'Egress Uncompressed Rate (60s)'}];
+
+
+    export const CLIENT_MONITOR_ATTRIBUTES = 
+    [
+    /* Connection counts aren't part of the public monitor spec as of yet :( */
+    {id:'rxMsgRate',text:'Ingress Rate (msgs/second)'},
+    {id:'averageRxMsgRate',text:'Avg Ingress Rate (msgs/second)'},
+    {id:'rxByteRate',text:'Ingress Rate (bytes/second)'},
+    {id:'averageRxByteRate',text:'Avg Ingress Rate (bytes/second)'},
+    {id:'txMsgRate',text:'Egress Rate (msgs/second)'},
+    {id:'averageTxMsgRate',text:'Avg Egress Rate (msgs/second)'},
+    {id:'txByteRate',text:'Egress Rate (bytes/second)'},
+    {id:'averageTxByteRate',text:'Avg Egress Rate (bytes/second)'},
+    {id:'rxDiscardedMsgCount', text: 'Ingress Discards' },
+    {id:'noSubscriptionMatchRxDiscardedMsgCount', text: 'Ingress No Subscription Match Discards' },
+    {id:'topicParseErrorRxDiscardedMsgCount', text: 'Topic Parse Error Discards' },
+    {id:'webParseErrorRxDiscardedMsgCount', text: 'Web Parse Error Discards' },
+    {id:'publishTopicAclRxDiscardedMsgCount', text: 'Denied Publish Topic ACL Discards' },
+    {id:'msgSpoolCongestionRxDiscardedMsgCount', text: 'Message Spool Congestion Discards' },
+    {id:'msgSpoolRxDiscardedMsgCount', text: 'Message Spool Discards' },
+    {id:'txDiscardedMsgCount',text:'Egress Discards'},
+    {id:'rxMsgCount',text:'Total Ingress Client Messages'},
+    {id:'txMsgCount',text:'Total Egress Client Messages'},
+    {id:'dataRxMsgCount',text:'Ingress Client Data Messages'},
+    {id:'dataTxMsgCount',text:'Egress Client Data Messages'},
+    {id:'controlRxMsgCount',text:'Ingress Client Control Messages'},
+    {id:'controlTxMsgCount',text:'Egress Client Control Messages'},
+    {id:'loginRxMsgCount',text:'Ingress Login Messages'},
+    {id:'loginTxMsgCount',text:'Egress Login Messages'},
+    {id:'rxByteCount',text:'Ingress Total Messages (bytes)'},
+    {id:'txByteCount',text:'Egress Total Messages (bytes)'},
+    {id:'dataRxByteCount',text:'Ingress Total Client Data Messages (bytes)'},
+    {id:'dataTxByteCount',text:'Egress Total Client Data Messages (bytes)'},
+    {id:'controlRxByteCount',text:'Ingress Total Client Control Messages (bytes)'},
+    {id:'controlTxByteCount',text:'Egress Total Client Control Messages (bytes)'},
+  ];
 

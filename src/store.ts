@@ -30,6 +30,14 @@ export class SempConnection {
         return `${this.sempUrl}/SEMP/v2/monitor/msgVpns/${this.vpnName}?select=${attrs.join(',')}`;
     }
 
+    buildVpnClientUrl(): string {
+        return `${this.sempUrl}/SEMP/v2/monitor/msgVpns/${this.vpnName}/clients?select=clientName,clientUsername,clientAddress`
+    }
+
+    buildVpnClientMonitorUrl(client:string,attrs:string[]): string {
+        return `${this.sempUrl}/SEMP/v2/monitor/msgVpns/${this.vpnName}/clients/${encodeURI(client).replace(/\//g,"%2F")}?select=clientName,clientUsername,clientAddress,${attrs.join(',')}`
+    }
+
     buildAuthHeader() {
         return 'Basic ' + btoa(this.sempUser + ':' + this.sempPassword);
     }
@@ -57,5 +65,7 @@ export class SempConnection {
     }
     }
 }
+
+// export const brokerStore = createBrokerStore([new SempConnection(1,true,'Node1','http://localhost:8080','default','admin','admin')]);
 
 export const brokerStore = createBrokerStore();
