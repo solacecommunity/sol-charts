@@ -29,7 +29,8 @@ let noAttributes = false;
 let sempPoller;
 
 let pollingInterval = '5';
-let pollingErrorMessages = [];
+let vpnPollingErrorMessages = [];
+let clientPollingErrorMessages = [];
 
 //Limiting the number of charts that are available to add to 5
 let chartsAvailable = [
@@ -152,9 +153,9 @@ function startCharting() {
                         fetchVpnClientMonitorStats(sempConnection, client, attributes)
                             .then((response) => {
                                 //Clear out the polling errors if applicable
-                                if (pollingErrorMessages.length > 0)
-                                    pollingErrorMessages = pollingErrorMessages.filter(
-                                        (errorMessage) => pollingErrorMessages.brokerId == sempConnection.id,
+                                if (clientPollingErrorMessages.length > 0)
+                                    clientPollingErrorMessages = clientPollingErrorMessages.filter(
+                                        (errorMessage) => clientPollingErrorMessages.client == client,
                                     );
 
                                 //Get the chartIds that are registered for the broker's, clients updates
@@ -168,15 +169,13 @@ function startCharting() {
                             })
                             .catch((err: Error) => {
                                 //Build the error message and update
-                                let errorMessage = `Error polling ${sempConnection.label} - ${err.message}`;
+                                let errorMessage = `Error polling client ${client} on ${sempConnection.label} - ${err.message}`;
 
-                                if (pollingErrorMessages.length == 0)
-                                    pollingErrorMessages = [{ brokerId: sempConnection.id, error: errorMessage }];
+                                if (clientPollingErrorMessages.length == 0)
+                                    clientPollingErrorMessages = [{ client: client, error: errorMessage }];
                                 else
-                                    pollingErrorMessages = pollingErrorMessages.map((pollErr) =>
-                                        pollErr.brokerId == sempConnection.id
-                                            ? { ...pollErr, error: errorMessage }
-                                            : pollErr,
+                                    clientPollingErrorMessages = clientPollingErrorMessages.map((pollErr) =>
+                                        pollErr.client == client ? { ...pollErr, error: errorMessage } : pollErr,
                                     );
                             });
                     });
@@ -195,9 +194,9 @@ function startCharting() {
                     fetchVpnMonitorStats(sempConnection, attrs)
                         .then((response) => {
                             //Clear out the polling errors if applicable
-                            if (pollingErrorMessages.length > 0)
-                                pollingErrorMessages = pollingErrorMessages.filter(
-                                    (errorMessage) => pollingErrorMessages.brokerId == sempConnection.id,
+                            if (vpnPollingErrorMessages.length > 0)
+                                vpnPollingErrorMessages = vpnPollingErrorMessages.filter(
+                                    (errorMessage) => vpnPollingErrorMessages.brokerId == sempConnection.id,
                                 );
                             //Get the chartIds that are registered for the broker's updates
                             let chartIds = chartAttributeMaps.getChartsForBroker(brokerId);
@@ -212,10 +211,10 @@ function startCharting() {
                             //Build the error message and update
                             let errorMessage = `Error polling ${sempConnection.label} - ${err.message}`;
 
-                            if (pollingErrorMessages.length == 0)
-                                pollingErrorMessages = [{ brokerId: sempConnection.id, error: errorMessage }];
+                            if (vpnPollingErrorMessages.length == 0)
+                                vpnPollingErrorMessages = [{ brokerId: sempConnection.id, error: errorMessage }];
                             else
-                                pollingErrorMessages = pollingErrorMessages.map((pollErr) =>
+                                vpnPollingErrorMessages = vpnPollingErrorMessages.map((pollErr) =>
                                     pollErr.brokerId == sempConnection.id
                                         ? { ...pollErr, error: errorMessage }
                                         : pollErr,
@@ -339,7 +338,21 @@ function startCharting() {
             </div>
         </Column>
     </Row>
-    {#each pollingErrorMessages as { error }}
+    {#each vpnPollingErrorMessages as { error }}
+        <Row>
+            <Column>
+                <div class="flex center-content">
+                    <ToastNotification
+                        kind="error"
+                        notificationType="inline"
+                        title="{error}"
+                        hideCloseButton="{true}"
+                    />
+                </div>
+            </Column>
+        </Row>
+    {/each}
+    {#each clientPollingErrorMessages as { error }}
         <Row>
             <Column>
                 <div class="flex center-content">

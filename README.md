@@ -9,12 +9,13 @@ The tool has the following features:
 * HTTP/s basic authentication to the Solace PubSub+ broker
 * Upto 5 charts from the application
 * Ability to chart 4 VPN attributes per broker
+* Ability to chart client attributes
 * Hosted on [github page](https://solacese.github.io/sol-charts) or as a [standalone electron app](https://github.com/solacese/sol-charts/releases/)
 
 
 ## Directions for usage
 
-![Chart Instructions](public/images/sol-chart/sol-chart.gif)
+![Chart Instructions](sol-charts.gif)
 
 1. Add atleast 1 broker to the settings screen and connect
 2. Navigate to the Charts section and select atleast 1 attribute to chart and click the start charting button
@@ -70,7 +71,7 @@ The `package.json` file contains helper scripts that will create a standalon ele
 You can run this by using the following commands:
 
 * `npm run package-mac` - For a Mac distribution 
-* `npm run package-windows` - For a Windows distribution 
+* `npm run package-win` - For a Windows distribution 
 * `npm run package-linux` - For a Linux distribution
 
 The releases will be present in the `release-builds` directory
