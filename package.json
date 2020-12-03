@@ -1,6 +1,6 @@
 {
   "name": "sol-charts",
-  "version": "2.1",
+  "version": "2.1.0",
   "author": "Thomas Kunnumpurath",
   "description": "A simple utility to chart stats from the Solace PubSub+ Broker",
   "scripts": {
