@@ -38,7 +38,7 @@ export async function connectAndStore() {
         sempPassword !== ''
     ) {
         console.log(`Attempting to connect to ${sempUrl}...`);
-        sempUrl = sempUrl.trim();
+        sempUrl = sempUrl.replace('/SEMP/v2/config', '').trim();
 
         if (sempUrl.charAt(sempUrl.length - 1) == '/') sempUrl = sempUrl.substring(0, sempUrl.length - 1);
 
