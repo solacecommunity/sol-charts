@@ -1,8 +1,8 @@
 <script lang="ts">
 import { Icon, Tag, MultiSelect, Row, Column } from 'carbon-components-svelte';
 import { getContext, onMount } from 'svelte';
-import { ChartAttributeMaps, ClientAttributes } from './ChartAttributeMaps';
-import { CLIENT_MONITOR_ATTRIBUTES } from '../dict/MonitorAttributes';
+import { ChartAttributeMaps } from './ChartAttributeMaps';
+import { getVpnClientMonitorAttributeDictionary } from '../dict/MonitorAttributes';
 import { brokerStore, SempConnection } from '../store';
 import WatsonHealthRotate_36016 from 'carbon-icons-svelte/lib/WatsonHealthRotate_36016';
 
@@ -10,6 +10,7 @@ export let chartId: number;
 export let brokerId: number;
 export let brokerLabel: string;
 export let disabled = false;
+export let sempVer: number;
 
 let nodeAttributeDisabled = true;
 
@@ -19,6 +20,8 @@ let attributeTagList = [];
 let clientTagList = [];
 let clientList = [];
 let selectedClients = [];
+
+let CLIENT_MONITOR_ATTRIBUTES;
 
 let chartAttributeMaps: ChartAttributeMaps = getContext(ChartAttributeMaps.CONTEXT_KEY);
 
@@ -129,6 +132,7 @@ $: {
 }
 
 onMount(async () => {
+    CLIENT_MONITOR_ATTRIBUTES = getVpnClientMonitorAttributeDictionary(sempVer);
     populateClientList();
 });
 </script>

@@ -6,7 +6,7 @@ import BrokerAttributeMultiSelect from './BrokerAttributeMultiSelect.svelte';
 import { brokerStore } from '../store';
 import { getContext } from 'svelte';
 import { ChartAttributeMaps } from './ChartAttributeMaps';
-import { CLIENT_MONITOR_ATTRIBUTES, VPN_MONITOR_ATTRIBUTES } from '../dict/MonitorAttributes';
+import { getLabelForVpnClientMonitorAttribute, getLabelForVpnMonitorAttribute } from '../dict/MonitorAttributes';
 
 export let chartId: number;
 
@@ -32,31 +32,23 @@ export function addVPNChartData(timeStamp: Date, brokerId: number, data: any) {
     let sempVer = $brokerStore.find((broker) => broker.id == brokerId).sempVer;
 
     attributes.forEach((attr) => {
-        let attrLabel = VPN_MONITOR_ATTRIBUTES.find((dict) => dict.id == attr).text;
+        let attrLabel = getLabelForVpnMonitorAttribute(sempVer, attr);
         let dataPoint = {
             group: brokerLabel + ':' + attrLabel,
-            value: getValueFromData(attr, sempVer, data),
+            value: getValueFromData(attr, data),
             date: timeStamp,
         };
         chartData = [...chartData, dataPoint];
     });
 }
 
-function getValueFromData(attr: string, sempVer: number, data: any) {
+function getValueFromData(attr: string, data: any) {
     let nestedAttr = attr.split('.');
-    let innerAttr = '';
-    let outerAttr = '';
-    if (nestedAttr.length == 2) {
-        innerAttr = nestedAttr[0];
-        outerAttr = nestedAttr[1];
+
+    if (nestedAttr.length > 1) {
+        return data[nestedAttr[0]][nestedAttr[1]];
     } else {
         return data[attr];
-    }
-
-    if (sempVer < 2.13) {
-        return data[innerAttr][outerAttr];
-    } else {
-        return data[outerAttr];
     }
 }
 
@@ -67,11 +59,10 @@ export function addClientChartData(timeStamp: Date, brokerId: number, data: any)
     let sempVer = $brokerStore.find((broker) => broker.id == brokerId).sempVer;
 
     attributes.forEach((attr) => {
-        let attrLabel = CLIENT_MONITOR_ATTRIBUTES.find((dict) => dict.id == attr).text;
-
+        let attrLabel = getLabelForVpnClientMonitorAttribute(sempVer, attr);
         let dataPoint = {
             group: `${data.clientUsername} (${brokerLabel}) : ${attrLabel}`,
-            value: getValueFromData(attr, sempVer, data),
+            value: getValueFromData(attr, data),
             date: timeStamp,
         };
         chartData = [...chartData, dataPoint];
@@ -147,7 +138,7 @@ export function addClientChartData(timeStamp: Date, brokerId: number, data: any)
                 <div class="flex center-content bx--label">Attributes to Chart</div>
             </Column>
         </Row>
-        {#each $brokerStore as { id, isConnected, label }}
+        {#each $brokerStore as { id, isConnected, label, sempVer }}
             {#if isConnected}
                 <div class="border-white mb-10">
                     <Row>
@@ -157,6 +148,7 @@ export function addClientChartData(timeStamp: Date, brokerId: number, data: any)
                                 brokerId="{id}"
                                 brokerLabel="{label}"
                                 disabled="{disabled}"
+                                sempVer="{sempVer}"
                             />
                         </Column>
                     </Row>

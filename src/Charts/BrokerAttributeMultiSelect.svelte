@@ -1,20 +1,24 @@
 <script lang="ts">
 import { Button, Tag, MultiSelect, Row, Column } from 'carbon-components-svelte';
-import { getContext } from 'svelte';
+import { getContext, onMount } from 'svelte';
 import { ChartAttributeMaps } from './ChartAttributeMaps';
-import { VPN_MONITOR_ATTRIBUTES } from '../dict/MonitorAttributes';
+import { getVpnMonitorAttributeDictionary } from '../dict/MonitorAttributes';
 import BrokerClientMultiSelect from './BrokerClientMultiSelect.svelte';
 import ArrowShiftDown16 from 'carbon-icons-svelte/lib/ArrowShiftDown16';
 import MacShift16 from 'carbon-icons-svelte/lib/MacShift16';
+
 export let chartId: number;
 export let brokerId: number;
 export let brokerLabel: string;
+export let sempVer: number;
 export let disabled = false;
 
 let showClientAttributes = false;
 
 let selectedAttributes = [];
 let tagList = [];
+
+let VPN_MONITOR_ATTRIBUTES = [];
 
 let chartAttributeMaps: ChartAttributeMaps = getContext(ChartAttributeMaps.CONTEXT_KEY);
 
@@ -47,6 +51,10 @@ function updateAttributeTags(selections: string[]) {
     //Update the map of the chart -> broker -> attributes
     chartAttributeMaps.setAttributesToChartBroker(chartId, brokerId, selections);
 }
+
+onMount(async () => {
+    VPN_MONITOR_ATTRIBUTES = getVpnMonitorAttributeDictionary(sempVer);
+});
 </script>
 
 <style>
@@ -133,6 +141,7 @@ function updateAttributeTags(selections: string[]) {
                     brokerId="{brokerId}"
                     brokerLabel="{brokerLabel}"
                     disabled="{disabled}"
+                    sempVer="{sempVer}"
                 />
             </Column>
         </Row>
