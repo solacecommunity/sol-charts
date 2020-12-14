@@ -113,6 +113,24 @@ async function fetchVpnClientMonitorStats(sempConnection: SempConnection, client
     }
 }
 
+function cleanAttributes(sempVer: number, attributes: string[]): string[] {
+    let polledAttributes = [];
+
+    if (sempVer > 2.12) {
+        attributes.forEach((attr) => {
+            let prefixAndSuffix = attr.split('.');
+            if (prefixAndSuffix.length == 2) {
+                polledAttributes.push(prefixAndSuffix[1]);
+            } else {
+                polledAttributes.push(attr);
+            }
+        });
+    } else {
+        polledAttributes = [...attributes];
+    }
+    return polledAttributes;
+}
+
 //Function to start charting
 function startCharting() {
     //Ensure that atleast 1 attribute is selected
@@ -141,16 +159,18 @@ function startCharting() {
                     (broker: SempConnection) => broker.id == brokerId,
                 );
 
+                let polledAttributes = cleanAttributes(sempConnection.sempVer, attributes);
+
                 if (sempConnection && attributes && clients && clients.length > 0 && attributes.length > 0) {
                     clients.forEach((client) => {
                         console.log(
                             `Polling ${sempConnection.label} - ${sempConnection.buildVpnClientMonitorUrl(
                                 client,
-                                attributes,
+                                polledAttributes,
                             )}...`,
                         );
 
-                        fetchVpnClientMonitorStats(sempConnection, client, attributes)
+                        fetchVpnClientMonitorStats(sempConnection, client, polledAttributes)
                             .then((response) => {
                                 //Clear out the polling errors if applicable
                                 if (clientPollingErrorMessages.length > 0)
@@ -188,10 +208,14 @@ function startCharting() {
                     (broker: SempConnection) => broker.id == brokerId,
                 );
 
+                let polledAttributes = cleanAttributes(sempConnection.sempVer, attrs);
+
                 //If there are attributes for the sempConnection then proceed to fetch
                 if (sempConnection && attrs.length > 0) {
-                    console.log(`Polling ${sempConnection.label} - ${sempConnection.buildVpnMonitorUrl(attrs)}...`);
-                    fetchVpnMonitorStats(sempConnection, attrs)
+                    console.log(
+                        `Polling ${sempConnection.label} - ${sempConnection.buildVpnMonitorUrl(polledAttributes)}...`,
+                    );
+                    fetchVpnMonitorStats(sempConnection, polledAttributes)
                         .then((response) => {
                             //Clear out the polling errors if applicable
                             if (vpnPollingErrorMessages.length > 0)

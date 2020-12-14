@@ -27,8 +27,40 @@ let isConnected = false;
 //Exported function to remove the component from the DOM by the parent
 export let close = (id: number) => {};
 
-//Function to connect to the broker via semp and store
 export async function connectAndStore() {
+    connectToBroker()
+        .then((response) => {
+            isConnected = true;
+            connectError = false;
+
+            let sempVer = response.data.sempVersion.split('.');
+
+            let majorMinorVer = parseFloat(sempVer[0] + '.' + sempVer[1]);
+
+            let sempConnection = new SempConnection(
+                nodeNumber,
+                true,
+                nodeLabel,
+                sempUrl,
+                vpnName,
+                sempUser,
+                sempPassword,
+                majorMinorVer,
+            );
+            console.log(`Connected to ${sempUrl} on ${majorMinorVer}...`);
+
+            brokerStore.removeBroker(nodeNumber);
+            brokerStore.addOrUpdateBroker(sempConnection);
+        })
+        .catch((err: Error) => {
+            isConnected = false;
+            connectError = true;
+            connectErrorMessage = err.message;
+        });
+}
+
+//Function to connect to the broker via semp and store
+async function connectToBroker() {
     if (
         !isConnected &&
         nodeLabel !== '' &&
@@ -47,40 +79,20 @@ export async function connectAndStore() {
         sempUser = sempUser.trim();
         sempPassword = sempPassword.trim();
 
-        const response = await fetch(sempUrl + `/SEMP/v2/monitor/msgVpns/${vpnName}?select=msgVpnName`, {
+        const response = await fetch(sempUrl + `/SEMP/v2/monitor/about/api`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 Authorization: 'Basic ' + btoa(sempUser + ':' + sempPassword),
             },
-        })
-            .then((res) => {
-                if (res.ok) {
-                    console.log(`Connected to ${sempUrl}...`);
-                    isConnected = true;
-                    connectError = false;
-                    let sempConnection = new SempConnection(
-                        nodeNumber,
-                        true,
-                        nodeLabel,
-                        sempUrl,
-                        vpnName,
-                        sempUser,
-                        sempPassword,
-                    );
-                    brokerStore.removeBroker(nodeNumber);
-                    brokerStore.addOrUpdateBroker(sempConnection);
-                } else {
-                    throw new Error('Unable to connect ' + res.statusText);
-                }
-            })
-            .catch((err: Error) => {
-                connectErrorMessage = 'Error connecting: ' + err.message;
-                console.log(connectErrorMessage);
-                connectError = true;
-                isConnected = false;
-            });
+        });
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Unable to connect ' + response.statusText);
+        }
     }
 }
 

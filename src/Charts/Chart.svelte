@@ -29,22 +29,49 @@ export function clearChart() {
 export function addVPNChartData(timeStamp: Date, brokerId: number, data: any) {
     let attributes = chartAttributeMaps.getAttributesForChartsBroker(chartId, brokerId);
     let brokerLabel = $brokerStore.find((broker) => broker.id == brokerId).label;
+    let sempVer = $brokerStore.find((broker) => broker.id == brokerId).sempVer;
+
     attributes.forEach((attr) => {
         let attrLabel = VPN_MONITOR_ATTRIBUTES.find((dict) => dict.id == attr).text;
-        let dataPoint = { group: brokerLabel + ':' + attrLabel, value: data[attr], date: timeStamp };
+        let dataPoint = {
+            group: brokerLabel + ':' + attrLabel,
+            value: getValueFromData(attr, sempVer, data),
+            date: timeStamp,
+        };
         chartData = [...chartData, dataPoint];
     });
+}
+
+function getValueFromData(attr: string, sempVer: number, data: any) {
+    let nestedAttr = attr.split('.');
+    let innerAttr = '';
+    let outerAttr = '';
+    if (nestedAttr.length == 2) {
+        innerAttr = nestedAttr[0];
+        outerAttr = nestedAttr[1];
+    } else {
+        return data[attr];
+    }
+
+    if (sempVer < 2.13) {
+        return data[innerAttr][outerAttr];
+    } else {
+        return data[outerAttr];
+    }
 }
 
 //Exported function to add client data to the chart
 export function addClientChartData(timeStamp: Date, brokerId: number, data: any) {
     let attributes = chartAttributeMaps.getClientAttributesForChartsBroker(chartId, brokerId);
     let brokerLabel = $brokerStore.find((broker) => broker.id == brokerId).label;
+    let sempVer = $brokerStore.find((broker) => broker.id == brokerId).sempVer;
+
     attributes.forEach((attr) => {
         let attrLabel = CLIENT_MONITOR_ATTRIBUTES.find((dict) => dict.id == attr).text;
+
         let dataPoint = {
             group: `${data.clientUsername} (${brokerLabel}) : ${attrLabel}`,
-            value: data[attr],
+            value: getValueFromData(attr, sempVer, data),
             date: timeStamp,
         };
         chartData = [...chartData, dataPoint];

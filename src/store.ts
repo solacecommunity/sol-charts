@@ -15,15 +15,17 @@ export class SempConnection {
     sempUser: string;
     sempPassword: string;
     vpnName:string;
+    sempVer: number;
 
-    public constructor(id:number,isConnected:boolean,label:string='',sempUrl:string='',vpnName:string='',sempUser:string='',sempPassword:string=''){
+    public constructor(id:number,isConnected:boolean,label:string='',sempUrl:string='',vpnName:string='',sempUser:string='',sempPassword:string='',sempVer:number=0.0){
         this.id = id;
         this.label=label;
         this.isConnected=isConnected;
         this.sempUrl=sempUrl;
         this.vpnName = vpnName;
         this.sempUser=sempUser;
-        this.sempPassword=sempPassword;
+        this.sempPassword = sempPassword;
+        this.sempVer = sempVer;
     }
 
     buildVpnMonitorUrl(attrs:string[]):string {
@@ -34,8 +36,8 @@ export class SempConnection {
         return `${this.sempUrl}/SEMP/v2/monitor/msgVpns/${this.vpnName}/clients?select=clientName,clientUsername,clientAddress`
     }
 
-    buildVpnClientMonitorUrl(client:string,attrs:string[]): string {
-        return `${this.sempUrl}/SEMP/v2/monitor/msgVpns/${this.vpnName}/clients/${encodeURI(client).replace(/\//g,"%2F")}?select=clientName,clientUsername,clientAddress,${attrs.join(',')}`
+    buildVpnClientMonitorUrl(client: string, attrs: string[]): string {
+        return `${this.sempUrl}/SEMP/v2/monitor/msgVpns/${this.vpnName}/clients/${encodeURI(client).replace(/#/g,"%23").replace(/\//g,"%2F")}?select=clientName,clientUsername,clientAddress,${attrs.join(',')}`
     }
 
     buildAuthHeader() {
