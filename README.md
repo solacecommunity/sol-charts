@@ -1,7 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![Build and Deploy](https://github.com/solacese/sol-charts/workflows/Build%20and%20Deploy/badge.svg)
 
 # [SolCharts](https://solacese.github.io/sol-charts) 
-## A simple utility to chart stats from the Solace PubSub+ Event Broker - [Click here to launch](https://solacese.github.io/sol-charts)
+## A simple utility to chart stats from the Solace PubSub+ Event Broker - [Click here to launch](https://solacecommunity.github.io/sol-charts)
 
 SolCharts uses SEMP commands to pull monitoring stats from Solace PubSub+ brokers. It completely runs on the client side and hence any credentials put into the tool does not get sent anywhere except the message broker to execute SEMP commands.
 
