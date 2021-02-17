@@ -12,7 +12,7 @@ The tool has the following features:
 * Upto 5 charts from the application
 * Ability to chart 4 VPN attributes per broker
 * Ability to chart client attributes
-* Hosted on [github page](https://solacese.github.io/sol-charts) or as a [standalone electron app](https://github.com/solacese/sol-charts/releases/)
+* Hosted on [github page](https://solacecommunity.github.io/sol-charts) or as a [standalone electron app](https://github.com/solacecommunity/sol-charts/releases/)
 
 
 ## Directions for usage
