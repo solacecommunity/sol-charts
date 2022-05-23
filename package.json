@@ -46,7 +46,7 @@
   "dependencies": {
     "@carbon/charts": "^0.58.1",
     "@carbon/charts-svelte": "^0.58.1",
-    "d3": "^5.14.2",
+    "d3": "7.4.4",
     "file-dialog": "^0.0.8",
     "file-saver": "^2.0.2",
     "sirv-cli": "^1.0.0",
