@@ -29,7 +29,6 @@ The tool has the following features:
 Install the dependencies...
 
 ```
-
 cd sol-charts
 npm install
 ```
