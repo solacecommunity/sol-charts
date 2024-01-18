@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public",
+    "start": "sirv public --port 8082",
     "validate": "svelte-check",
     "dev-electron": "run-p dev start-electron",
     "build-electron": "run-s build start-electron",
