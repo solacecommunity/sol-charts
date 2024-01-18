@@ -24,6 +24,12 @@ let isCharting = false;
 charting_store.subscribe((val) => (isCharting = val));
 </script>
 
+<style lang="scss" global>
+/** Gray 100 theme **/
+@import 'carbon-components-svelte/css/g100';
+@import '@carbon/charts/styles-g100';
+</style>
+
 <main>
     <Header company="SolCharts" platformName="">
         {#if !isCharting}
